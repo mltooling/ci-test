@@ -4,7 +4,7 @@ import requests
 class TestStringMethods(unittest.TestCase):
 
     def test_healthy(self):
-        result = requests.get('workspace:8080/healthy')
+        result = requests.get('http://ci-test-workspace:8080/healthy')
         print(result.status_code)
         self.assertEqual(result.status_code, 200)
 

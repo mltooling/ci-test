@@ -9,7 +9,8 @@ RUN \
 RUN \
     pip install docker
 
-COPY "/resources/test.py" "/resources/test.py"     
+COPY "/resources/test.py" "/resources/test.py"
+COPY "/resources/run.py" "/resources/run.py"
 
 # RUN Definition:
 ENTRYPOINT [ "python" ]
