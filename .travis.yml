@@ -6,4 +6,4 @@ before_install:
   - docker network create ci-test-net
 
 script:
-  - ocker run --rm --network ci-test-net -v /var/run/docker.sock:/var/run/docker.sock ci-test:0.1
+  - docker run --rm --network ci-test-net -v /var/run/docker.sock:/var/run/docker.sock ci-test:0.1
