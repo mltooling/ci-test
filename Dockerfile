@@ -14,4 +14,4 @@ COPY "/resources/run.py" "/resources/run.py"
 
 # RUN Definition:
 ENTRYPOINT [ "python" ]
-CMD [ "/resources/test.py" ]
+CMD [ "/resources/run.py" ]
