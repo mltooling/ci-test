@@ -7,7 +7,7 @@ jobs:
       image: ubuntu:20.04
       options: -v /var/run/docker.sock:/var/run/docker.sock
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
     - name: Build Image
       run: docker build -t ci-test:0.1 .
     - name: Create network
