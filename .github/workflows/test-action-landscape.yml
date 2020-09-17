@@ -1,0 +1,10 @@
+on: workflow_dispatch
+name: 'Test CI'
+jobs:
+  testbox:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check OS
+      run: uname -r
+    - name: Check Disk Size
+      run: df -h
