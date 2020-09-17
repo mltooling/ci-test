@@ -35,10 +35,13 @@ if index == 15:
     # The workspace did not start
     sys.exit(-1)
 
+exit_code = 0
 print("Workspace started! Execute tests:")
-subprocess.call(["python", "/resources/test.py"])
+exit_code = subprocess.call(["python", "/resources/test.py"])
 print("Executed tests.")
 
 # Cleanup
 print("Clean up landscape")
 container.remove(force=True)
+
+sys.exit(exit_code)
