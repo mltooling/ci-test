@@ -1,3 +1,4 @@
+on: workflow_dispatch
 name: 'Test CI'
 description: 'Test Container Workflow'
 jobs:
