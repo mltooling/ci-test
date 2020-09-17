@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: 'Test CI'
+name: 'Test Action Landscape'
 jobs:
   testbox:
     runs-on: ubuntu-latest
