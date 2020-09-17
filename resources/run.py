@@ -5,11 +5,16 @@ import sys
 import subprocess
 
 client = docker.from_env()
+network_name = 'ci-test-net'
+try:
+    client.networks.get(network_name)
+except docker.errors.NotFound:
+    client.networks.create(network_name, driver='bridge')
 
 name = "ci-test-workspace"
 container = client.containers.run(
     'mltooling/ml-workspace-minimal:0.9.1',
-    network="ci-test-net",
+    network=network_name,
     name=name,
     detach=True)
 
