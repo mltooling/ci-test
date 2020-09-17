@@ -1,0 +1,17 @@
+name: 'Test CI'
+description: 'Test Container Workflow'
+jobs:
+  testbox:
+#    runs-on: ubuntu-latest
+    container:
+      image: docker:19.03-rc
+      options: -v /var/run/docker.sock:/var/run/docker.sock
+    steps:
+    - uses: actions/checkout@master
+    - name: Build Image
+      run: docker build -t ci-test:0.1 .
+    - name: Create network
+      run: docker network create ci-test-net
+    - name: Run container
+      run: docker run --rm --network ci-test-net -v /var/run/docker.sock:/var/run/docker.sock ci-test:0.1
+  
