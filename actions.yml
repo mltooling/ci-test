@@ -2,9 +2,9 @@ name: 'Test CI'
 description: 'Test Container Workflow'
 jobs:
   testbox:
-    runs-on: ubuntu-latest
+#    runs-on: ubuntu-latest
     container:
-      image: ubuntu:20.04
+      image: docker:19.03-rc
       options: -v /var/run/docker.sock:/var/run/docker.sock
     steps:
     - uses: actions/checkout@master
