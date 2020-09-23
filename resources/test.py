@@ -1,13 +1,17 @@
 import unittest
 import requests
+import os
 
 from subprocess import run, PIPE
 
 import re
+
+workspace_name = "ci-test-workspace"
+workspace_port = 8080
 class TestStringMethods(unittest.TestCase):
 
     def test_healthy(self):
-        result = requests.get('http://ci-test-workspace:8080/healthy')
+        result = requests.get(f'http://{workspace_name}:{workspace_port}/healthy')
         print(result.status_code)
         self.assertEqual(result.status_code, 200)
 
@@ -15,7 +19,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual('foo'.upper(), 'FOO')
 
     def test_isupper(self):
-        self.assertTrue('FOo'.isupper())
+        self.assertTrue('FOO'.isupper())
         self.assertFalse('Foo'.isupper())
 
     def test_split(self):
@@ -25,20 +29,22 @@ class TestStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             s.split(2)
 
-    def test_tool_access(self):
+    def test_tool_vnc(self):
         # Test whether tools are accessible
-        result = requests.get('http://ci-test-workspace:8091/tools/vnc/?password=vncpassword')
+        result = requests.get(f'http://{workspace_name}:{workspace_port}/tools/vnc/?password=vncpassword')
         self.assertEqual(result.status_code, 200)
         self.assertIn('<title>Desktop VNC</title>', result.text)
-
-        result = requests.get('http://ci-test-workspace:8091/tools/vscode/')
+    
+    def test_tool_vscode(self):
+        result = requests.get(f'http://{workspace_name}:{workspace_port}/tools/vscode/')
         self.assertEqual(result.status_code, 200)
         self.assertIn('Microsoft Corporation', result.text)
-
-        result = requests.get('http://ci-test-workspace:8080/tooling/ssh/setup-command?origin=http://localhost:8080')
+    
+    def test_ssh(self):
+        result = requests.get(f'http://{workspace_name}:{workspace_port}/tooling/ssh/setup-command?origin=http://{workspace_name}:{workspace_port}')
         self.assertEqual(result.status_code, 200)
         self.assertIn('/bin/bash', result.text)
-        ssh_script_runner_regex = r'^\/bin\/bash <\(curl -s --insecure "(http:\/\/ci-test-workspace:8091\/shared\/ssh\/setup\?token=[a-z0-9]+&host=ci-test-workspace&port=8091"\))$'
+        ssh_script_runner_regex = r'^\/bin\/bash <\(curl -s --insecure "(http:\/\/ci-test-workspace:8080\/shared\/ssh\/setup\?token=[a-z0-9]+&host=ci-test-workspace&port=8080)"\)$'
         pattern = re.compile(ssh_script_runner_regex)
         match = pattern.match(result.text)
         self.assertIsNotNone(match)
@@ -50,10 +56,12 @@ class TestStringMethods(unittest.TestCase):
         with open('/setup-ssh.sh', 'w') as f:
             f.write(r.text)
             # r can now be executed
+        # make the file executable for the user
+        os.chmod('/setup-ssh.sh', 0o744)
         ssh_connection_name = 'test'
         completed_process = run(['/bin/bash -c "/setup-ssh.sh"'], input=ssh_connection_name, encoding='ascii', shell=True, stdout=PIPE, stderr=PIPE)
-        output = completed_process.stdout
-        self.assertIn('Connection successful!', output)
+        self.assertEqual(completed_process.stderr, '')
+        self.assertIn('Connection successful!', completed_process.stdout)
 
 if __name__ == '__main__':
     unittest.main()
