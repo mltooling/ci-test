@@ -44,7 +44,7 @@ class TestStringMethods(unittest.TestCase):
         result = requests.get(f'http://{workspace_name}:{workspace_port}/tooling/ssh/setup-command?origin=http://{workspace_name}:{workspace_port}')
         self.assertEqual(result.status_code, 200)
         self.assertIn('/bin/bash', result.text)
-        ssh_script_runner_regex = r'^\/bin\/bash <\(curl -s --insecure "(http:\/\/ci-test-workspace:8080\/shared\/ssh\/setup\?token=[a-z0-9]+&host=ci-test-workspace&port=8080)"\)$'
+        ssh_script_runner_regex = rf'^\/bin\/bash <\(curl -s --insecure "(http:\/\/{workspace_name}:{workspace_port}\/shared\/ssh\/setup\?token=[a-z0-9]+&host={workspace_name}&port={workspace_port})"\)$'
         pattern = re.compile(ssh_script_runner_regex)
         match = pattern.match(result.text)
         self.assertIsNotNone(match)
