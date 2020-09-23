@@ -32,21 +32,40 @@ while r == None or (r.status_code != 200 and index < 15):
     except requests.ConnectionError as e:
         # Catch error that is raised when the workspace container is not reachable yet
         pass
-    print(f"Try {index}", flush=True)
 
 if index == 15:
-    # The workspace did not start
+    print("The workspace did not start")
     sys.exit(-1)
 
 exit_code = 0
 # Sleep a moment to give all processes time to start within the Workspace container
 time.sleep(15)
 print("Workspace started! Execute tests:", flush=True)
-exit_code = subprocess.call(["python", "/resources/test.py"])
+
+# Test workspace APIs and SSH
+print("Execute API and SSH Tests", flush=True)
+exit_code_api_test = subprocess.call(["python", "/resources/test.py"])
+
+# Test libraries within workspace
+print("Execute library tests within workspace", flush=True)
+## Copy and executing unit test file in workspace
+subprocess.call(["tar", "-cvf", "workspace_tests.py.tar", "-C", "/resources", "workspace_tests.py"], stdout=subprocess.PIPE)
+with open('/workspace_tests.py.tar', 'r') as file:
+    container.put_archive(path="/tmp", data=file.read())
+exit_code_lib_test, output = container.exec_run("python /tmp/workspace_tests.py")
+print(output.decode("UTF-8"), flush=True)
+
 print("Executed tests.", flush=True)
 
 # Cleanup
 print("Clean up landscape", flush=True)
 container.remove(force=True)
+
+if (exit_code_api_test and exit_code_lib_test) != 0:
+    exit_code = 1
+elif exit_code_api_test != 0:
+    exit_code = 2
+elif exit_code_lib_test != 0:
+    exit_code = 3
 
 sys.exit(exit_code)

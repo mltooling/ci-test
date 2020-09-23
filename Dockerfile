@@ -12,6 +12,7 @@ RUN \
 COPY "/resources/test.py" "/resources/test.py"
 COPY "/resources/run.py" "/resources/run.py"
 COPY "/resources/config.py" "/resources/config.py"
+COPY "/resources/workspace_tests.py" "/resources/workspace_tests.py"
 
 # RUN Definition:
 ENTRYPOINT [ "python" ]
