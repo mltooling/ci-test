@@ -6,8 +6,8 @@ from subprocess import run, PIPE
 
 import re
 
-workspace_name = "ci-test-workspace"
-workspace_port = 8080
+from config import workspace_name, workspace_port
+
 class TestStringMethods(unittest.TestCase):
 
     def test_healthy(self):
@@ -55,13 +55,17 @@ class TestStringMethods(unittest.TestCase):
         r = requests.get(script_url)
         with open('/setup-ssh.sh', 'w') as f:
             f.write(r.text)
-            # r can now be executed
         # make the file executable for the user
         os.chmod('/setup-ssh.sh', 0o744)
         ssh_connection_name = 'test'
         completed_process = run(['/bin/bash -c "/setup-ssh.sh"'], input=ssh_connection_name, encoding='ascii', shell=True, stdout=PIPE, stderr=PIPE)
         self.assertEqual(completed_process.stderr, '')
         self.assertIn('Connection successful!', completed_process.stdout)
+
+        completed_process = run("ssh test 'echo $WORKSPACE_NAME'", shell=True, stdout=PIPE, stderr=PIPE)
+        self.assertEqual(completed_process.stderr, b'')
+        stdout = completed_process.stdout.decode('UTF-8').replace('\n', '')
+        self.assertEqual(stdout, workspace_name)
 
 if __name__ == '__main__':
     unittest.main()
