@@ -36,6 +36,8 @@ if index == 15:
     sys.exit(-1)
 
 exit_code = 0
+# Sleep a moment to give all processes time to start within the Workspace container
+time.sleep(15)
 print("Workspace started! Execute tests:")
 exit_code = subprocess.call(["python", "/resources/test.py"])
 print("Executed tests.")
