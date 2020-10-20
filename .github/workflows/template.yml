@@ -8,3 +8,5 @@ jobs:
         run: uname -r
       - name: Check Disk Size
         run: df -h
+      - name: Hello World
+        run: echo Hello World
