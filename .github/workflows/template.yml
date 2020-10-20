@@ -1,15 +1,15 @@
-name: "Release-Flow"
+name: Release-Flow
 on:
   push:
     tags:
       - v*
 runs-on: ubuntu-latest
 steps:
-    - name: Get the version
+  - name: Get-the-version
     id: get_version
     run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - name: Print version
+  - name: Print-version
     run: echo ${steps.get_version.outputs.VERSION}
-    - name: Checkout Version Tag
+  - name: Checkout-Version-Tag
     id: checkout-version
     uses: checkout@${steps.get_version.outputs.VERSION}
