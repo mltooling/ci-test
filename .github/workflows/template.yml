@@ -8,9 +8,5 @@ jobs:
     name: Test Job
     runs-on: ubuntu-latest
     steps:
-        - name: Get Version Tag
-        id: get-version:
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        - name: Print Version
-        id: print-version
-        run: echo ${steps.get_version.outputs.VERSION}
+        - name: Hello World
+        run: echo Hello World
