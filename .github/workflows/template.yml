@@ -1,12 +1,10 @@
-name: Release-Flow
-on:
-  push:
-    tags:
-      - v*
+on: workflow_dispatch
+name: "Template"
 jobs:
-  test-job:
-    name: Test Job
+  testbox:
     runs-on: ubuntu-latest
     steps:
-        - name: Hello World
-        run: echo Hello World
+      - name: Check OS
+        run: uname -r
+      - name: Check Disk Size
+        run: df -h
