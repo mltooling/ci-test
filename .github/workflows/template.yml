@@ -15,6 +15,6 @@ jobs:
         run: echo $(echo $REF_TAG | cut -d / -f 3)
       - name: Get Version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $REF_TAG | cut -d / -f 3)
-      - name: Print Formatted Version
+        run: echo ::set-output name=VERSION::$(echo $REF_TAG | cut -d / -f 3 | cut -c 2-)
+      - name: Print Version
         run: echo ${{ steps.get_version.outputs.VERSION }}
