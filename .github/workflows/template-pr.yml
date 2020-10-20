@@ -1,0 +1,11 @@
+on:
+  pull_request: [opened, edited]
+name: "Template"
+jobs:
+  testbox:
+    runs-on: ubuntu-latest
+    env:
+      REF_TAG: ${{ github.ref }}
+    steps:
+      - name: Print Ref tag
+        run: echo "$REF_TAG"
