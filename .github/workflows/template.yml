@@ -4,15 +4,16 @@ on:
     tags:
       - v*
 jobs:
-    test-job:
-        name: Test Job
-        runs-on: ubuntu-latest
-        steps:
-        - name: Get Version Tag
-            id: get_version
-            run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        - name: Print Version
-            run: echo ${steps.get_version.outputs.VERSION}
-        - name: Checkout-Version-Tag
-            id: checkout-version
-            uses: checkout@${steps.get_version.outputs.VERSION}
+  test-job:
+    name: Test Job
+    runs-on: ubuntu-latest
+    steps:
+      get-version:
+        name: Get Version Tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      print-version:
+        name: Print Version
+        run: echo ${steps.get_version.outputs.VERSION}
+      checkout-version:
+        name: Checkout-Version-Tag
+        uses: checkout@${steps.get_version.outputs.VERSION}
