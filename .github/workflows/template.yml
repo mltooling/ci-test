@@ -3,14 +3,15 @@ on:
   push:
     tags:
       - v*
-runs-on: ubuntu-latest
 jobs:
     test-job:
+        name: Test Job
+        runs-on: ubuntu-latest
         steps:
-        - name: Get-the-version
+        - name: Get Version Tag
             id: get_version
             run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        - name: Print-version
+        - name: Print Version
             run: echo ${steps.get_version.outputs.VERSION}
         - name: Checkout-Version-Tag
             id: checkout-version
