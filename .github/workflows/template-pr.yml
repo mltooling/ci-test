@@ -1,6 +1,7 @@
 on:
-  pull_request: [opened, edited]
-name: "Template"
+  pull_request:
+    types: [opened, edited]
+name: "Template for PRs"
 jobs:
   testbox:
     runs-on: ubuntu-latest
