@@ -6,9 +6,13 @@ name: "Template"
 jobs:
   testbox:
     runs-on: ubuntu-latest
+    env:
+      REF_TAG: ${{ github.ref }}
     steps:
       - name: Check OS
         run: uname -r
+      - name: Print Ref tag
+        run: echo "$REF_TAG"
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
