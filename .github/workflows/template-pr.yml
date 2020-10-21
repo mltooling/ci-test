@@ -1,6 +1,6 @@
 on:
   pull_request:
-    types: [opened, synchronized]
+    types: [opened, synchronize]
 name: "Template for PRs"
 jobs:
   testbox:
