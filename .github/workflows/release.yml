@@ -1,0 +1,8 @@
+name: "Custom Event Test -  Release"
+on: release
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello World
+        run: echo Hello
