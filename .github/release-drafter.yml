@@ -1,13 +1,37 @@
-name-template: '$RESOLVED_VERSION'
-tag-template: 'v$RESOLVED_VERSION'
+name-template: "$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
 categories:
-  - title: '🚀 Features'
+  - title: "💥 Breaking Changes"
     labels:
-      - 'feature'
-      - 'enhancement'
-  - title: '🐛 Bug Fixes'
+      - "breaking"
+  - title: "⚠️ Deprecations"
+  - title: "✨ Features & Improvements"
     labels:
-      - 'bug'
-change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+      - "feature"
+      - "enhancement"
+  - title: "🐛 Bug Fixes"
+    labels:
+      - "bug"
+  - title: "📝 Documentation"
+    labels:
+      - "documentation"
+  - title: "👷 Maintenance & Refactoring"
+    labels:
+      - "maintenance"
+      - "refactoring"
+  - title: "🔒 Security"
+    labels:
+      - "security"
+  - title: "🔥 Removed"
+  - title: "⚡️ Performance"
+  - title: "✅ Tests"
+  - title: "⬆ Dependencies"
+    labels:
+      - "dependencies"
+change-template: "- $TITLE (#$NUMBER) by @$AUTHOR"
 template: |
   $CHANGES
+
+  ## 👥 Contributors
+
+  Thanks to $CONTRIBUTORS for the pull requests and contributions.

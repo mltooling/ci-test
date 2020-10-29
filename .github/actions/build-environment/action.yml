@@ -20,9 +20,7 @@ inputs:
   container_registry_password:
     description: "Password used for container registry login."
     required: false
-  github_token:
-    description: "Personal access token for Github account."
-    required: false
+
 runs:
   using: "docker"
   image: "Dockerfile"

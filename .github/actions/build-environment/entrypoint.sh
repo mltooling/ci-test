@@ -3,11 +3,6 @@
 # Stops script execution if a command has an error
 set -e
 
-if [ -z "$GITHUB_TOKEN" ]; then
-    # If github token is provided via secret, it is in input github token.
-    GITHUB_TOKEN=$INPUT_GITHUB_TOKEN
-fi
-
 if [ -n "$GITHUB_TOKEN" ]; then
     # Use the github token to authenticate the git interaction (see this Stackoverflow answer: https://stackoverflow.com/a/57229018/5379273)
     git config --global url."https://api:$GITHUB_TOKEN@github.com/".insteadOf "https://github.com/"

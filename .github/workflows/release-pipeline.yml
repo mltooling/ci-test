@@ -12,41 +12,40 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: get-latest-version
+        id: get-latest-version
         uses: ./.github/actions/get-latest-version
         with:
-          current_commit_only: false
+          current_commit_only: true
       - name: run-component-builds
         uses: ./.github/actions/build-environment
         with:
-          build_args: --make --force --version=${{ env.LATEST_VERSION }}
+          build_args: --make --force --version=${{ steps.get-latest-version.outputs.latest_version }}
       - name: run-component-tests
         uses: ./.github/actions/build-environment
         with:
-          build_args: --test --force --version=${{ env.LATEST_VERSION }}
+          build_args: --test --force --version=${{ steps.get-latest-version.outputs.latest_version }}
       - name: release-components
         uses: ./.github/actions/build-environment
         with:
-          build_args: --release --force --version=${{ env.LATEST_VERSION }}
+          build_args: --release --force --version=${{ steps.get-latest-version.outputs.latest_version }}
           pypi_password: ${{ secrets.PYPI_PASSWORD }}
           container_registry_url: ${{ secrets.CONTAINER_REGISTRY_URL }}
           container_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           container_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
   create-release-draft:
     needs: release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: get-latest-version
+        id: get-latest-version
         uses: ./.github/actions/get-latest-version
         with:
           current_commit_only: false
       - name: create-release-draft
         uses: release-drafter/release-drafter@v5
         with:
-          version: ${{ env.LATEST_VERSION }}
-          # name: ${{ env.LATEST_VERSION }}
-          # tag: v${{ env.LATEST_VERSION }}
+          version: ${{ steps.get-latest-version.outputs.latest_version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # optional: upload release assets via actions/upload-release-asset@v1
