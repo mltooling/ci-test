@@ -2,6 +2,7 @@
 documentation:
   - "docs/*"
   - "docs/**/*"
+  - "README.md"
   - "**/README.md"
   - "CONTRIBUTING.md"
 
@@ -13,5 +14,7 @@ maintenance:
   - ".reuse/*"
   - "LICENSES/*"
   - ".editorconfig"
+  - ".gitignore"
   - "**/.gitignore"
+  - "build.py"
   - "**/build.py"
