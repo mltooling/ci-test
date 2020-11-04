@@ -41,5 +41,6 @@ if [ -n "$INPUT_PYPI_REPOSITORY" ]; then
     BUILD_SECRETS="$BUILD_SECRETS --pypi-repository=$INPUT_PYPI_REPOSITORY"
 fi
 
+docker inspect $(basename "$(cat /proc/1/cpuset)")
 echo "python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS"
 touch test.txt
