@@ -88,7 +88,7 @@ jobs:
           pr_body: "Automated pull request for release version ${{ steps.get-release-version.outputs.release_version }}"
           pr_draft: false
           pr_allow_empty: true
-          pr_milestone: v${{ steps.get-release-version.outputs.release_version }}
+          # only works if it exist: pr_milestone: v${{ steps.get-release-version.outputs.release_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - if: ${{ env.GITHUB_TOKEN }}
         name: create-release-draft

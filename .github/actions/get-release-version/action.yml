@@ -5,7 +5,7 @@ author: "ML Tooling <team@mltooling.org>"
 inputs:
   branch_prefix:
     description: "Prefix of release branch"
-    default: "release/"
+    default: "release/v"
     required: false
 
 outputs:
