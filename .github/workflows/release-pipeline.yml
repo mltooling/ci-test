@@ -26,16 +26,16 @@ jobs:
         run: echo "::set-env name=VERSION::${{ github.event.inputs.version }}"
       - name: set-github-token
         run: echo "::set-env name=GITHUB_TOKEN::${{ secrets.GITHUB_TOKEN }}"
-      - if: ${{ env.GITHUB_TOKEN  &&  env.VERSION != null }}
+      - if: ${{ env.GITHUB_TOKEN  &&  env.VERSION }}
         name: create-release-branch
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: "release/v${{ env.VERSION }}"
-      - if: ${{ env.GITHUB_TOKEN == "" }}
+      - if: ${{ ! env.GITHUB_TOKEN  }}
         uses: actions/checkout@v2
-      - if: ${{ env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN }}
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -70,7 +70,7 @@ jobs:
           container_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           container_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
         # Optional: do automatic changes to source code artefacts required for release
-      - if: ${{ env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN }}
         name: update-repository
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -78,7 +78,7 @@ jobs:
           commit_user_email: actions@github.com
           commit_message: Apply automatic release changes
           # tagging_message: v${{ steps.get-latest-version.outputs.latest_version }}
-      - if: ${{ env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN }}
         name: pull-request
         uses: repo-sync/pull-request@v2
         with:
@@ -89,7 +89,7 @@ jobs:
           pr_allow_empty: true
           pr_milestone: v${{ steps.get-release-version.outputs.release_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - if: ${{ env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN }}
         name: create-release-draft
         uses: release-drafter/release-drafter@v5
         with:
