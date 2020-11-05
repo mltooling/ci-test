@@ -2,20 +2,18 @@ name: release-pipeline
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+    inputs:
+      version:
+        description: "Version of this release."
+        required: true
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: get-latest-version
-        id: get-latest-version
-        uses: ./.github/actions/get-latest-version
         with:
-          current_commit_only: true
+          ref: release/v${{ github.event.inputs.version }}
       # - name: run-component-builds
       #   uses: ./.github/actions/build-environment
       #   with:
@@ -47,7 +45,7 @@ jobs:
       - name: create-release-draft
         uses: release-drafter/release-drafter@v5
         with:
-          version: ${{ steps.get-latest-version.outputs.latest_version }}
+          version: ${{ github.event.inputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # create-release-draft:
