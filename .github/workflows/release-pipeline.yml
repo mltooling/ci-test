@@ -46,30 +46,30 @@ jobs:
         uses: ./.github/actions/get-release-version
         with:
           branch_prefix: ${{ env.BRANCH_PREFIX }}
-      - name: run-component-builds
-        uses: ./.github/actions/build-environment
-        with:
-          build_args: --make --force --version=${{ steps.get-release-version.outputs.release_version }}
-      - name: run-linting-and-style-checks
-        uses: ./.github/actions/build-environment
-        with:
-          build_args: --check --force --version=${{ steps.get-release-version.outputs.release_version }}
-      - name: run-component-tests
-        uses: ./.github/actions/build-environment
-        with:
-          build_args: --test --force --version=${{ steps.get-release-version.outputs.release_version }}
-      - name: release-components
-        uses: ./.github/actions/build-environment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          build_args: --release --force --version=${{ steps.get-release-version.outputs.release_version }}
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
-          pypi_repository: ${{ secrets.PYPI_REPOSITORY }}
-          container_registry_url: ${{ secrets.CONTAINER_REGISTRY_URL }}
-          container_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-          container_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
-        # Optional: do automatic changes to source code artefacts required for release
+      # - name: run-component-builds
+      #   uses: ./.github/actions/build-environment
+      #   with:
+      #     build_args: --make --force --version=${{ steps.get-release-version.outputs.release_version }}
+      # - name: run-linting-and-style-checks
+      #   uses: ./.github/actions/build-environment
+      #   with:
+      #     build_args: --check --force --version=${{ steps.get-release-version.outputs.release_version }}
+      # - name: run-component-tests
+      #   uses: ./.github/actions/build-environment
+      #   with:
+      #     build_args: --test --force --version=${{ steps.get-release-version.outputs.release_version }}
+      # - name: release-components
+      #   uses: ./.github/actions/build-environment
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     build_args: --release --force --version=${{ steps.get-release-version.outputs.release_version }}
+      #     pypi_token: ${{ secrets.PYPI_TOKEN }}
+      #     pypi_repository: ${{ secrets.PYPI_REPOSITORY }}
+      #     container_registry_url: ${{ secrets.CONTAINER_REGISTRY_URL }}
+      #     container_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      #     container_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+      # Optional: do automatic changes to source code artefacts required for release
       - if: ${{ env.GITHUB_TOKEN }}
         name: update-repository
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -87,8 +87,8 @@ jobs:
           destination_branch: "master"
           pr_title: Finalize release for version ${{ steps.get-release-version.outputs.release_version }}
           pr_body: "Automated pull request for release version ${{ steps.get-release-version.outputs.release_version }}"
-          pr_draft: false
-          pr_allow_empty: true
+          pr_draft: False
+          pr_allow_empty: True
           # only works if it exist: pr_milestone: v${{ steps.get-release-version.outputs.release_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - if: ${{ env.GITHUB_TOKEN }}
@@ -96,7 +96,7 @@ jobs:
         uses: release-drafter/release-drafter@v5
         with:
           version: ${{ steps.get-release-version.outputs.release_version }}
-          # tag: v${{ steps.get-release-version.outputs.release_version }}
+          tag: v${{ steps.get-release-version.outputs.release_version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Optional: upload release assets via actions/upload-release-asset@v1
