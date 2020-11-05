@@ -18,13 +18,10 @@ fi
 # Remove prefix from version
 RELEASE_VERSION="${BRANCH_NAME#$INPUT_BRANCH_PREFIX}"
 
-if [[ ! "$RELEASE_VERSION" =~ ^v([0-9]+\.[0-9]+\.[0-9]+.*)$ ]]; then
+if [[ ! "$RELEASE_VERSION" =~ ^([0-9]+\.[0-9]+\.[0-9]+.*)$ ]]; then
     echo "The branch does not contain a valid version: $RELEASE_VERSION"
     exit 1
 fi
-
-# Remove v from version string
-RELEASE_VERSION=$(echo $RELEASE_VERSION | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+.*)/\1/')
 
 # Set version as outpu
 echo "::set-output name=release_version::$RELEASE_VERSION"

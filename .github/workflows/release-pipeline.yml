@@ -13,6 +13,7 @@ on:
 
 env:
   VERSION: ${{ secrets.VERSION }}
+  BRANCH_PREFIX: "release/v"
 
 jobs:
   release:
@@ -32,19 +33,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: "release/v${{ env.VERSION }}"
+          branch: "${{ env.BRANCH_PREFIX }}${{ env.VERSION }}"
       - if: ${{ ! env.GITHUB_TOKEN  }}
         uses: actions/checkout@v2
       - if: ${{ env.GITHUB_TOKEN }}
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          ref: release/v${{ env.VERSION }}
+          ref: ${{ env.BRANCH_PREFIX }}${{ env.VERSION }}
       - name: get-release-version
         id: get-release-version
         uses: ./.github/actions/get-release-version
         with:
-          branch_prefix: "release/"
+          branch_prefix: ${{ env.BRANCH_PREFIX }}
       - name: run-component-builds
         uses: ./.github/actions/build-environment
         with:
@@ -81,6 +82,7 @@ jobs:
         name: pull-request
         uses: repo-sync/pull-request@v2
         with:
+          source_branch: ${{ env.BRANCH_PREFIX }}${{ steps.get-release-version.outputs.release_version }}
           destination_branch: "master"
           pr_title: Finalize release for version ${{ steps.get-release-version.outputs.release_version }}
           pr_body: "Automated pull request for release version ${{ steps.get-release-version.outputs.release_version }}"
