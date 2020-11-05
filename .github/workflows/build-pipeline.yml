@@ -18,6 +18,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: get-release-version
+        id: get-release-version
+        uses: ./.github/actions/get-release-version
+        with:
+          branch_prefix: "release/"
+      - run: echo "::set-env name=RELEASE_VERSION::$(sed "s/^v//" <<< "${{ steps.get-release-version.outputs.release_version }}")"
+      - run: echo ${{ env.RELEASE_VERSION }}
       - name: set-input-build-args
         if: ${{ github.event.inputs != null  &&  github.event.inputs.build_args != null}}
         run: echo "::set-env name=BUILD_ARGS::${{ github.event.inputs.build_args }}"
