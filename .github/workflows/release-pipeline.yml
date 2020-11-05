@@ -82,7 +82,7 @@ jobs:
         name: pull-request
         uses: repo-sync/pull-request@v2
         with:
-          destination_branch: "main"
+          destination_branch: "master"
           pr_title: Finalize release for version ${{ steps.get-release-version.outputs.release_version }}
           pr_body: "Automated pull request for release version ${{ steps.get-release-version.outputs.release_version }}"
           pr_draft: false
