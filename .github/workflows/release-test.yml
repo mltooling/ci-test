@@ -44,20 +44,26 @@ jobs:
       #     commit_user_email: actions@github.com
       #     commit_message: Apply automatic release changes
       #     tagging_message: v${{ steps.get-latest-version.outputs.latest_version }}
-  create-release-draft:
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: get-latest-version
-        id: get-latest-version
-        uses: ./.github/actions/get-latest-version
-        with:
-          current_commit_only: false
       - name: create-release-draft
         uses: release-drafter/release-drafter@v5
         with:
           version: ${{ steps.get-latest-version.outputs.latest_version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # optional: upload release assets via actions/upload-release-asset@v1
+  # create-release-draft:
+  #   needs: release
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: get-latest-version
+  #       id: get-latest-version
+  #       uses: ./.github/actions/get-latest-version
+  #       with:
+  #         current_commit_only: false
+  #     - name: create-release-draft
+  #       uses: release-drafter/release-drafter@v5
+  #       with:
+  #         version: ${{ steps.get-latest-version.outputs.latest_version }}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # optional: upload release assets via actions/upload-release-asset@v1
