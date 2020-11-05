@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: release/v${{ github.event.inputs.version }}
+      #  with:
+      #    ref: release/v${{ github.event.inputs.version }}
       # - name: run-component-builds
       #   uses: ./.github/actions/build-environment
       #   with:
