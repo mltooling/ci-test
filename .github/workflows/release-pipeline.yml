@@ -96,7 +96,7 @@ jobs:
         uses: release-drafter/release-drafter@v5
         with:
           version: ${{ steps.get-release-version.outputs.release_version }}
-          tag: v${{ steps.get-release-version.outputs.release_version }}
+          # tag: v${{ steps.get-release-version.outputs.release_version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Optional: upload release assets via actions/upload-release-asset@v1
