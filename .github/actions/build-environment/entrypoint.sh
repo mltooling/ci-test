@@ -56,4 +56,4 @@ set -x
 
 # Execute build script
 echo "python -u build.py $BUILD_ARGS"
-touch test.txt
+echo "My File, My Choice" > "./file.txt"

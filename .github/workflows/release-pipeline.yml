@@ -45,7 +45,6 @@ jobs:
         uses: ./.github/actions/get-release-version
         with:
           branch_prefix: "release/"
-      - run: echo ${{ steps.get-release-version.outputs.release_version }}
       - name: run-component-builds
         uses: ./.github/actions/build-environment
         with:
