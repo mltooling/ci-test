@@ -19,6 +19,8 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo "::set-env name=GITHUB_EVENT_NAME::push"
       - run: printenv
+      - run: cat $GITHUB_EVENT_PATH
+      - run: echo "::set-env name=GITHUB_EVENT_PATH::foo"
       #  with:
       #    ref: release/v${{ github.event.inputs.version }}
       # - name: run-component-builds
