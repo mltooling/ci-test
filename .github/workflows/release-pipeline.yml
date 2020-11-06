@@ -78,7 +78,12 @@ jobs:
           commit_user_name: Release Bot
           commit_user_email: actions@github.com
           commit_message: Apply automatic release changes
-          tagging_message: v${{ steps.get-release-version.outputs.release_version }}
+      - if: ${{ env.GITHUB_TOKEN }}
+        name: create-release-tag
+        uses: tvdias/github-tagger@v0.0.2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          tag: v${{ steps.get-release-version.outputs.release_version }}
       - if: ${{ env.GITHUB_TOKEN }}
         name: pull-request
         uses: repo-sync/pull-request@v2
@@ -87,8 +92,8 @@ jobs:
           destination_branch: "master"
           pr_title: Finalize release for version ${{ steps.get-release-version.outputs.release_version }}
           pr_body: "Automated pull request for release version ${{ steps.get-release-version.outputs.release_version }}"
-          pr_draft: False
-          pr_allow_empty: True
+          pr_draft: false
+          pr_allow_empty: true
           # only works if it exist: pr_milestone: v${{ steps.get-release-version.outputs.release_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
       # Fix of release drafter to allow different events to trigger the release
