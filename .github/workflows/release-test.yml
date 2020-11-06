@@ -55,8 +55,13 @@ jobs:
       #     commit_user_email: actions@github.com
       #     commit_message: Apply automatic release changes
       #     tagging_message: v${{ steps.get-latest-version.outputs.latest_version }}
+      - name: checkout-fixed-release-drafter
+        uses: actions/checkout@v2
+        with:
+          repository: ml-tooling/release-drafter
+          path: ./.github/actions/release-drafter
       - name: create-release-draft
-        uses: release-drafter/release-drafter@v5
+        uses: ./.github/actions/release-drafter
         with:
           version: ${{ github.event.inputs.version }}
         env:
