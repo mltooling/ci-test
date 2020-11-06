@@ -21,6 +21,9 @@ jobs:
       - run: printenv
       - run: cat $GITHUB_EVENT_PATH
       - run: echo "::set-env name=GITHUB_EVENT_PATH::foo"
+      - name: get-latest-version
+        id: get-latest-version
+        uses: ./.github/actions/get-latest-version
       #  with:
       #    ref: release/v${{ github.event.inputs.version }}
       # - name: run-component-builds
