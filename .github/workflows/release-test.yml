@@ -6,6 +6,9 @@ on:
       version:
         description: "Version of this release."
         required: true
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   release:
