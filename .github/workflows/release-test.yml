@@ -23,8 +23,8 @@ jobs:
       - run: echo "::set-env name=GITHUB_EVENT_PATH::foo"
       - uses: hmarr/debug-action@v1.0.0
         env:
-          GITHUB_EVENT_PATH: ""
-          GITHUB_EVENT_NAME: ""
+          GITHUB_EVENT_PATH: "foo"
+          GITHUB_EVENT_NAME: "foo"
       #  with:
       #    ref: release/v${{ github.event.inputs.version }}
       # - name: run-component-builds
