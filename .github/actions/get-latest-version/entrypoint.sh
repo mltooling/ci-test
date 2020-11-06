@@ -20,5 +20,6 @@ fi
 
 LATEST_VERSION=$(echo $LATEST_VERSION | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+.*)/\1/')
 
+printenv
 echo "::set-output name=latest_version::$LATEST_VERSION"
 # echo "::set-env name=LATEST_VERSION::$LATEST_VERSION"
