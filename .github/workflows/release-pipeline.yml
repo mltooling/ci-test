@@ -91,9 +91,15 @@ jobs:
           pr_allow_empty: True
           # only works if it exist: pr_milestone: v${{ steps.get-release-version.outputs.release_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      # Fix of release drafter to allow different events to trigger the release
+      - name: checkout-fixed-release-drafter
+        uses: actions/checkout@v2
+        with:
+          repository: ml-tooling/release-drafter
+          path: ./.github/actions/release-drafter
       - if: ${{ env.GITHUB_TOKEN }}
         name: create-release-draft
-        uses: release-drafter/release-drafter@v5
+        uses: ./.github/actions/release-drafter
         with:
           version: ${{ steps.get-release-version.outputs.release_version }}
           tag: v${{ steps.get-release-version.outputs.release_version }}
