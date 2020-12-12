@@ -36,16 +36,16 @@ jobs:
           # Required for local checkout
           apt-get update
           apt-get install -y git
-      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: create-release-branch
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: "${{ env.BRANCH_PREFIX }}${{ env.VERSION }}"
-      - if: ${{ ! (env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "")  }}
+      - if: ${{ ! (env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '')  }}
         uses: actions/checkout@v2
-      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -82,7 +82,7 @@ jobs:
           container_registry_url: ${{ secrets.CONTAINER_REGISTRY_URL }}
           container_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           container_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
-      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: update-repository
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -105,13 +105,13 @@ jobs:
       - if: ${{ env.GITHUB_ACTOR == "nektos/act" }}
         name: no-relese-drafter-support
         run: echo "The release drafter currently does not work with act, please create the release from the Github UI."
-      - if: ${{ env.GITHUB_ACTOR != "nektos/act" && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_ACTOR != "nektos/act" && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: checkout-fixed-release-drafter
         uses: actions/checkout@v2
         with:
           repository: ml-tooling/release-drafter
           path: ./.git/cloned-actions/release-drafter
-      - if: ${{ env.GITHUB_ACTOR != "nektos/act" && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      - if: ${{ env.GITHUB_ACTOR != "nektos/act" && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: create-release-draft
         uses: ./.git/cloned-actions/release-drafter
         with:
