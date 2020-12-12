@@ -13,6 +13,7 @@ env:
   VERSION: ${{ secrets.VERSION }}
   BRANCH_PREFIX: "release/v"
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true # TODO: only needed until act supports the new way
+  DEFAULT_BRANCH: master
 
 jobs:
   release:
@@ -34,7 +35,12 @@ jobs:
       - if: ${{ ! (env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "") }}
         name: print-empty
         run: echo "empty"
-      - if: ${{ env.GITHUB_TOKEN  &&  env.VERSION }}
+      - name: install-latest-git
+        run: |
+          # Required for local checkout
+          apt-get update
+          apt-get install -y git
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: create-release-branch
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
@@ -48,18 +54,25 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ env.BRANCH_PREFIX }}${{ env.VERSION }}
+          token: ${{ env.GITHUB_TOKEN }}
       - name: run-component-builds
         uses: ./.github/actions/build-environment
         with:
           build_args: --make --force --version=${{ env.VERSION  }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: run-linting-and-style-checks
         uses: ./.github/actions/build-environment
         with:
           build_args: --check --force --version=${{ env.VERSION  }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: run-component-tests
         uses: ./.github/actions/build-environment
         with:
           build_args: --test --force --test-marker=slow --version=${{ env.VERSION  }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: release-components
         uses: ./.github/actions/build-environment
         env:
@@ -80,12 +93,19 @@ jobs:
           commit_user_email: actions@github.com
           commit_message: Apply automatic release changes for v${{ env.VERSION  }}
           tagging_message: v${{ env.VERSION  }}
+      # Fix of release drafter to allow different events to trigger the release
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+        name: checkout-fixed-pull-request-action
+        uses: actions/checkout@v2
+        with:
+          repository: ml-tooling/pull-request
+          path: ./.github/actions/pull-request
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: pull-request
-        uses: repo-sync/pull-request@v2
+        uses: ./.github/actions/pull-request
         with:
           source_branch: ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }}
-          destination_branch: "main"
+          destination_branch: ${{ env.DEFAULT_BRANCH  }}
           pr_title: Finalize release for version ${{ env.VERSION  }}
           pr_body: "Automated pull request for release version ${{ env.VERSION  }}"
           pr_draft: false
@@ -93,6 +113,8 @@ jobs:
           pr_label: "skip changelog"
           # only works if it exist: pr_milestone: v${{ env.VERSION  }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Fix of release drafter to allow different events to trigger the release
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: checkout-fixed-release-drafter
@@ -100,7 +122,7 @@ jobs:
         with:
           repository: ml-tooling/release-drafter
           path: ./.github/actions/release-drafter
-      - if: ${{ env.GITHUB_TOKEN }}
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: create-release-draft
         uses: ./.github/actions/release-drafter
         with:
