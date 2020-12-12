@@ -96,8 +96,8 @@ jobs:
         shell: bash
         run: |
           curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.2
-          # TODO: Add milestone if started from milestone
-          bin/hub pull-request -b ${{ env.DEFAULT_BRANCH }} -h ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }} --no-edit -m "Finalize release for version ${{ env.VERSION  }}" -m "Automated pull request for release version ${{ env.VERSION  }}" -l "skip changelog" ${{ env.PR_MILESTONE_LINK  }} || true
+          # TODO: Milestone link currently does not work with closed milestones: ${{ env.PR_MILESTONE_LINK  }} (problem with hub cli)
+          bin/hub pull-request -b ${{ env.DEFAULT_BRANCH }} -h ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }} --no-edit -m "Finalize release for version ${{ env.VERSION  }}" -m "Automated pull request for release version ${{ env.VERSION  }}" -l "skip changelog" || true
           rm bin/hub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
