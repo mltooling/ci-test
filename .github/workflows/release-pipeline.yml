@@ -31,7 +31,8 @@ jobs:
         run: 'if [[ ! "${{ env.VERSION }}" =~ ^([0-9]+\.[0-9]+\.[0-9]+.*)$ ]]; then echo "The version is not valid: ${{ env.VERSION }}"; exit 1; fi'
       - name: set-github-token
         run: echo "::set-env name=GITHUB_TOKEN::${{ secrets.GITHUB_TOKEN }}"
-      - name: install-latest-git
+      - if: ${{ env.GITHUB_ACTOR == 'nektos/act' }}
+        name: install-latest-git
         run: |
           # Required for local checkout
           apt-get update
