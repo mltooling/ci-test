@@ -99,10 +99,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ml-tooling/pull-request
-          path: ./.github/actions/pull-request
+          path: .git/cloned-actions/pull-request
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: pull-request
-        uses: ./.github/actions/pull-request
+        uses: ./.git/cloned-actions/pull-request
         with:
           source_branch: ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }}
           destination_branch: ${{ env.DEFAULT_BRANCH  }}
@@ -121,10 +121,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ml-tooling/release-drafter
-          path: ./.github/actions/release-drafter
+          path: .git/cloned-actions/release-drafter
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: create-release-draft
-        uses: ./.github/actions/release-drafter
+        uses: ./.git/cloned-actions/release-drafter
         with:
           version: ${{ env.VERSION }}
           tag: v${{ env.VERSION  }}
