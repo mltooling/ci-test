@@ -93,28 +93,42 @@ jobs:
           commit_user_email: actions@github.com
           commit_message: Apply automatic release changes for v${{ env.VERSION  }}
           tagging_message: v${{ env.VERSION  }}
-      # Fix of release drafter to allow different events to trigger the release
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
-        name: checkout-fixed-pull-request-action
-        uses: actions/checkout@v2
+        name: create-pull-request
+        uses: peter-evans/create-pull-request@v3
         with:
-          repository: ml-tooling/pull-request
-          path: ./.github/actions/pull-request
-      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
-        name: pull-request
-        uses: ./.github/actions/pull-request
-        with:
-          source_branch: ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }}
-          destination_branch: ${{ env.DEFAULT_BRANCH  }}
-          pr_title: Finalize release for version ${{ env.VERSION  }}
-          pr_body: "Automated pull request for release version ${{ env.VERSION  }}"
-          pr_draft: false
-          pr_allow_empty: true
-          pr_label: "skip changelog"
-          # only works if it exist: pr_milestone: v${{ env.VERSION  }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Apply automatic release changes for v${{ env.VERSION  }}
+          committer: Release Bot <actions@github.com>
+          branch: ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }}
+          base: ${{ env.DEFAULT_BRANCH  }}
+          title: Finalize release for version ${{ env.VERSION  }}
+          body: "Automated pull request for release version ${{ env.VERSION  }}"
+          labels: "skip changelog"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Fix of release drafter to allow different events to trigger the release
+      # - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      #   name: checkout-fixed-pull-request-action
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: ml-tooling/pull-request
+      #     path: ./.github/actions/pull-request
+      # - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
+      #   name: pull-request
+      #   uses: ./.github/actions/pull-request
+      #   with:
+      #     source_branch: ${{ env.BRANCH_PREFIX }}${{ env.VERSION  }}
+      #     destination_branch: ${{ env.DEFAULT_BRANCH  }}
+      #     pr_title: Finalize release for version ${{ env.VERSION  }}
+      #     pr_body: "Automated pull request for release version ${{ env.VERSION  }}"
+      #     pr_draft: false
+      #     pr_allow_empty: true
+      #     pr_label: "skip changelog"
+      #     # only works if it exist: pr_milestone: v${{ env.VERSION  }}
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Fix of release drafter to allow different events to trigger the release
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != "" }}
         name: checkout-fixed-release-drafter
