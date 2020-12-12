@@ -102,16 +102,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Fix of release drafter to allow different events to trigger the release
       # TODO: currently does not work with act
-      - if: ${{ env.GITHUB_ACTOR == "nektos/act" }}
+      - if: ${{ env.GITHUB_ACTOR == 'nektos/act' }}
         name: no-relese-drafter-support
         run: echo "The release drafter currently does not work with act, please create the release from the Github UI."
-      - if: ${{ env.GITHUB_ACTOR != "nektos/act" && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
+      - if: ${{ env.GITHUB_ACTOR != 'nektos/act' && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: checkout-fixed-release-drafter
         uses: actions/checkout@v2
         with:
           repository: ml-tooling/release-drafter
           path: ./.git/cloned-actions/release-drafter
-      - if: ${{ env.GITHUB_ACTOR != "nektos/act" && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
+      - if: ${{ env.GITHUB_ACTOR != 'nektos/act' && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: create-release-draft
         uses: ./.git/cloned-actions/release-drafter
         with:
