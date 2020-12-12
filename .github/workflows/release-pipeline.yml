@@ -23,7 +23,7 @@ jobs:
         name: set-milestone-version
         run: |
           echo "::set-env name=VERSION::$(sed "s/^v//" <<< "${{ github.event.milestone.title }}")"
-          echo "::set-env name=PR_MILESTONE_LINK::-M ${{ github.event.milestone.title }}
+          echo "::set-env name=PR_MILESTONE_LINK::-M ${{ github.event.milestone.title }}"
       - if: ${{ github.event.inputs != null  &&  github.event.inputs.version != null }}
         name: set-input-version
         run: echo "::set-env name=VERSION::${{ github.event.inputs.version }}"
