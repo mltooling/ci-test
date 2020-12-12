@@ -31,7 +31,8 @@ jobs:
         run: 'if [[ ! "${{ env.VERSION }}" =~ ^([0-9]+\.[0-9]+\.[0-9]+.*)$ ]]; then echo "The version is not valid: ${{ env.VERSION }}"; exit 1; fi'
       - name: set-github-token
         run: echo "::set-env name=GITHUB_TOKEN::${{ secrets.GITHUB_TOKEN }}"
-      - if: ${{ env.GITHUB_ACTOR == 'nektos/act' }}
+      # Fix git version for act if github token is provided
+      - if: ${{ env.GITHUB_ACTOR == 'nektos/act' && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: install-latest-git
         run: |
           # Required for local checkout
@@ -92,7 +93,8 @@ jobs:
           commit_user_email: actions@github.com
           commit_message: Apply automatic release changes for v${{ env.VERSION  }}
           tagging_message: v${{ env.VERSION  }}
-      - name: create-pull-request
+      - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
+        name: create-pull-request
         shell: bash
         run: |
           curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.2
@@ -103,7 +105,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Fix of release drafter to allow different events to trigger the release
       # TODO: currently does not work with act
-      - if: ${{ env.GITHUB_ACTOR == 'nektos/act' }}
+      - if: ${{ env.GITHUB_ACTOR == 'nektos/act' && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
         name: no-relese-drafter-support
         run: echo "The release drafter currently does not work with act, please create the release from the Github UI."
       - if: ${{ env.GITHUB_ACTOR != 'nektos/act' && env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
