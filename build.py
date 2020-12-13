@@ -1,4 +1,4 @@
 import os
 
-with open('output_file', 'wb') as fout:
-    fout.write(os.urandom(10))
+#with open('output_file', 'wb') as fout:
+#    fout.write(os.urandom(10))
