@@ -40,4 +40,4 @@ jobs:
           build_args: ${{ env.BUILD_ARGS }}
           working_directory: ${{ env.WORKING_DIRECTORY }}
         env:
-          GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
