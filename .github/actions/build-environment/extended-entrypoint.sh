@@ -7,6 +7,9 @@ docker inspect $(hostname)
 echo "Print GitHub Token"
 echo $GITHUB_TOKEN
 
+echo "Print Input_Build_Args"
+echo $INPUT_BUILD_ARGS
+
 # Thereby, you can reuse the existing implementation:
 /bin/bash /entrypoint.sh "$@"
 # Save the exit code of the previous command
